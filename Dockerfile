@@ -25,7 +25,7 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl
 
 RUN composer update -vvv
 # RUN cp /var/www/html/app/.env.exmaple /var/www/html/app/.env
-RUN chmod -R 777 .
+RUN chmod -R 744 .
 COPY web/.env.example .env
 
 EXPOSE 80
