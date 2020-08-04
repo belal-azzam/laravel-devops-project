@@ -23,7 +23,7 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl
 # RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 # RUN docker-php-ext-install gd
 
-RUN composer update -vvv
+RUN composer clearcache && composer update -vvv
 # RUN cp /var/www/html/app/.env.exmaple /var/www/html/app/.env
 RUN chmod -R 744 .
 COPY web/.env.example .env
