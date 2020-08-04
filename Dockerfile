@@ -1,7 +1,7 @@
 FROM php:7-apache
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY start-apache.sh /var/www/html
-ADD app /var/www/html/app
+ADD web /var/www/html/app
 RUN a2enmod rewrite
 WORKDIR /var/www/html/app
 # RUN git clone https://github.com/belal-azzam/laravel-devops-project . 
