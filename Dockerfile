@@ -1,11 +1,16 @@
 FROM php:7-apache
+ENV MYSQL_HOST=
+ENV MYSQL_USER=
+ENV MYSQL_PASSWORD=
+ENV MYSQL_DATABASE=
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY start-apache.sh /var/www/html
 ADD web /var/www/html/app
 RUN a2enmod rewrite
+RUN apt-get update && apt-get install nano
 WORKDIR /var/www/html/app
 # RUN git clone https://github.com/belal-azzam/laravel-devops-project . 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -20,13 +25,12 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     curl
 RUN docker-php-ext-install pdo_mysql zip exif pcntl
-# RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-# RUN docker-php-ext-install gd
 
-RUN composer clearcache && composer update -vvv
+
+# RUN composer clearcache && composer update -vvv
 # RUN cp /var/www/html/app/.env.exmaple /var/www/html/app/.env
-RUN chmod -R 744 .
-COPY web/.env.example .env
-
+RUN chmod -R 777 storage
+RUN chmod -R 755 .
+# COPY web/.env.example .env
 EXPOSE 80
 CMD ["/var/www/html/start-apache.sh"]
