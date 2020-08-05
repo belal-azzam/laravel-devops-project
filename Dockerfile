@@ -9,8 +9,7 @@ ADD web /var/www/html/app
 RUN a2enmod rewrite
 RUN apt-get update && apt-get install nano
 WORKDIR /var/www/html/app
-# RUN git clone https://github.com/belal-azzam/laravel-devops-project . 
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -27,11 +26,9 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install pdo_mysql zip exif pcntl
 
 
-# RUN composer clearcache && composer update -vvv
-# RUN cp /var/www/html/app/.env.exmaple /var/www/html/app/.env
+RUN composer clearcache && composer update -vvv
 RUN chmod -R 755 .
 RUN chmod -R 777 storage
 
-# COPY web/.env.example .env
 EXPOSE 80
 CMD ["/var/www/html/start-apache.sh"]
