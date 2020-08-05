@@ -27,7 +27,7 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl
 
 
 RUN composer clearcache 
-RUN composer update -vvv
+RUN composer global update -vvv
 RUN chmod -R 755 .
 RUN chmod -R 777 storage
 
