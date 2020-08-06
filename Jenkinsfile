@@ -20,7 +20,7 @@ pipeline {
     }
     stage('Linting PHP') {
       steps{
-        sh 'docker run belalazzam/laravel-devops' + ":$BUILD_NUMBER" + ' /scripts/lintphp.sh'
+        sh 'docker run belalazzam/laravel-devops' + ":$BUILD_NUMBER" + ' /scripts/lintphp.sh /var/www/html/app'
       }
     }
     stage('Deploy Image') {

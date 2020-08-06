@@ -13,7 +13,7 @@ while test $# -gt 0; do
         continue
     fi
 
-    for file in `find $current -type f  -not -path ./vendor/* -name "*.php"` ; do
+    for file in `find $current -type f -name "*.php" -not -path "./vendor/*"` ; do
         RESULTS=`php -l $file`
 
         if [ "$RESULTS" != "No syntax errors detected in $file" ] ; then
