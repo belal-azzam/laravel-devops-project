@@ -31,6 +31,7 @@ RUN composer install -vvv
 RUN cp .env.example .env
 RUN chmod -R 755 .
 RUN chmod -R 777 storage
-
+COPY scripts /scripts
+RUN chmod -R +x /scripts
 EXPOSE 80
 CMD ["/var/www/html/start-apache.sh"]
