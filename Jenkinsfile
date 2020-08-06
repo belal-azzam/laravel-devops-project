@@ -37,5 +37,10 @@ pipeline {
         sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
+    stage('Deploy last image to cluster') {
+      steps{
+        sh "kubectl set image deployment/laravel-dev-ops-web laravel-dev-ops-web=$registry:$BUILD_NUMBER --record -n laravel-devops "
+      }
+    }
   }
 }
