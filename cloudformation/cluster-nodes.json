@@ -1,0 +1,116 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "EKS Managed Nodes (SSH access: true) [created by eksctl]",
+  "Mappings": {
+    "ServicePrincipalPartitionMap": {
+      "aws": {
+        "EC2": "ec2.amazonaws.com",
+        "EKS": "eks.amazonaws.com",
+        "EKSFargatePods": "eks-fargate-pods.amazonaws.com"
+      },
+      "aws-cn": {
+        "EC2": "ec2.amazonaws.com.cn",
+        "EKS": "eks.amazonaws.com",
+        "EKSFargatePods": "eks-fargate-pods.amazonaws.com"
+      },
+      "aws-us-gov": {
+        "EC2": "ec2.amazonaws.com",
+        "EKS": "eks.amazonaws.com",
+        "EKSFargatePods": "eks-fargate-pods.amazonaws.com"
+      }
+    }
+  },
+  "Resources": {
+    "ManagedNodeGroup": {
+      "Type": "AWS::EKS::Nodegroup",
+      "Properties": {
+        "AmiType": "AL2_x86_64",
+        "ClusterName": "laravel-devops",
+        "DiskSize": 80,
+        "InstanceTypes": [
+          "t3.micro"
+        ],
+        "Labels": {
+          "alpha.eksctl.io/cluster-name": "laravel-devops",
+          "alpha.eksctl.io/nodegroup-name": "linux-nodes"
+        },
+        "NodeRole": {
+          "Fn::GetAtt": [
+            "NodeInstanceRole",
+            "Arn"
+          ]
+        },
+        "NodegroupName": "linux-nodes",
+        "RemoteAccess": {
+          "Ec2SshKey": "last-project-key"
+        },
+        "ScalingConfig": {
+          "DesiredSize": 3,
+          "MaxSize": 4,
+          "MinSize": 1
+        },
+        "Subnets": {
+          "Fn::Split": [
+            ",",
+            { 
+              "Fn::ImportValue": "laravel-devops::SubnetsPublic"
+            }
+          ]
+        },
+        "Tags": {
+          "alpha.eksctl.io/nodegroup-name": "linux-nodes",
+          "alpha.eksctl.io/nodegroup-type": "managed"
+        }
+      }
+    },
+    "NodeInstanceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  {
+                    "Fn::FindInMap": [
+                      "ServicePrincipalPartitionMap",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      "EC2"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+          },
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+          },
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/AmazonEKS_CNI_Policy"
+          }
+        ],
+        "Path": "/",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}/NodeInstanceRole"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

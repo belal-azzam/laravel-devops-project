@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-dev-ops-web
+  namespace: laravel-dev-ops
+  labels:
+    app: laravel-dev-ops-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel-dev-ops-web
+  template:
+    metadata:
+      labels:
+        app: laravel-dev-ops-web
+    spec:
+      containers:
+      - name: laravel-dev-ops-web
+        image: belalazzam/laravel-devops:19
+        env:
+          - name: DB_CONNECTION
+            value: mysql
+          - name: DB_HOST
+            value: mysql8-service
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_DATABASE
+            value: laravel
+          - name: DB_PASSWORD
+            value: admin
+          - name: DB_USERNAME
+            value: db_user
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: laravel-dev-ops
+  labels:
+    run: web-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: laravel-dev-ops-web
