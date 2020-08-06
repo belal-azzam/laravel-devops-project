@@ -20,7 +20,7 @@ pipeline {
     }
     stage('Image Validation') {
       steps{
-        sh 'docker run -it belalazzam/laravel-devops:' + $BUILD_NUMBER + ' find . -type f -not -path "./vendor/*" -name "*.php" -exec php -l {} \\; |grep -v "No syntax errors detected"'
+        sh 'docker run -it belalazzam/laravel-devops' + ":$BUILD_NUMBER" + ' find . -type f -not -path "./vendor/*" -name "*.php" -exec php -l {} \\; |grep -v "No syntax errors detected"'
       }
     }
     stage('Deploy Image') {
