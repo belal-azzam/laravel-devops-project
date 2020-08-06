@@ -39,7 +39,8 @@ pipeline {
     }
     stage('Deploy last image to cluster') {
       steps{
-        sh "kubectl set image deployment/laravel-dev-ops-web laravel-dev-ops-web=$registry:$BUILD_NUMBER --record -n laravel-devops "
+        sh "kubectl get deployment -n laravel-devops"
+        sh "kubectl set image -n laravel-devops deployment/laravel-dev-ops-web laravel-dev-ops-web=$registry:$BUILD_NUMBER --record "
       }
     }
   }
