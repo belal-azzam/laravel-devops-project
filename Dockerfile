@@ -28,7 +28,7 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl
 
 RUN composer clearcache 
 RUN composer install -vvv
-RUN cp web/.env.example web/.env
+RUN cp .env.example .env
 RUN chmod -R 755 .
 RUN chmod -R 777 storage
 
