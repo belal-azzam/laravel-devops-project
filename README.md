@@ -12,3 +12,4 @@ project files:
 2. web contians the laravel app
 3. app.yaml contains kubernetes cluster deployment ans service config
 4. start-apache the start script for the docker image
+5. Jenkinsfile pipeline config
