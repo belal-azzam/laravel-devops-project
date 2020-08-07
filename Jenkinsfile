@@ -39,8 +39,9 @@ pipeline {
     }
     stage('Deploy last image to cluster') {
       steps{
-        sh "kubectl get deployment -n laravel-devops"
-        sh "kubectl set image -n laravel-devops deployment/laravel-dev-ops-web laravel-dev-ops-web=$registry:$BUILD_NUMBER --record "
+        withKubeConfig([credentialsId: 'kube-config-user-id', serverUrl: 'https://8C57813D2BA29B5C80F0D97E25597A3D.yl4.us-west-2.eks.amazonaws.com']) {
+            sh 'kubectl set image -n laravel-devops deployment/laravel-dev-ops-web laravel-dev-ops-web=$registry:$BUILD_NUMBER --record'
+        }
       }
     }
   }
