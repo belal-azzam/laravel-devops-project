@@ -1,5 +1,4 @@
 <?php
-asdsad
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
