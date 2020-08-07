@@ -33,5 +33,6 @@ RUN chmod -R 755 .
 RUN chmod -R 777 storage
 COPY scripts /scripts
 RUN chmod -R +x /scripts
+RUN chmod  +x /var/www/html/start-apache.sh
 EXPOSE 80
 CMD ["/var/www/html/start-apache.sh"]
